@@ -37,6 +37,8 @@ jobs:
         run: |
           node copy-www.js
           chmod +x android/gradlew
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses 2>/dev/null || true
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-36" "build-tools;36.0.0" "platforms;android-35" "build-tools;35.0.0" 2>/dev/null || true
 
       - name: Build Android Debug APK
         run: |
