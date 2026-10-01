@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Production & Build Folders
+www/
+android/app/build/
+android/build/
+android/.gradle/
+android/captures/
+.gradle/
+
+# System and IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log

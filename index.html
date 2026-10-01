@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>មជ្ឈមណ្ឌលហ្គេមគណិតវិទ្យា - Kids Math Arcade</title>
+    <meta name="description" content="ហ្គេមគណិតវិទ្យាដ៏សម្បូរបែប និងទាក់ទាញបំផុតសម្រាប់កុមារគ្រប់វ័យ ចែកចេញតាមកម្រិតសិក្សា (មត្តេយ្យ ដល់ ថ្នាក់ទី៦)">
+    
+    <!-- Modern Playful Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Kantumruy+Pro:wght@400;600;700&family=Outfit:wght@400;600;800&family=Battambang:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Android PWA & Mobile App Support -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Floating Background Math Particles -->
+    <div class="bg-floating-symbols" id="bg-symbols"></div>
+
+    <div id="app">
+        <!-- Persistent Top Header & Status Bar -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="profile-pill" id="profile-btn" title="ប្តូររូបតំណាង (Change Avatar)">
+                    <div class="avatar-badge" id="player-avatar">🦉</div>
+                    <div class="profile-info">
+                        <span class="player-name" id="player-name">ទីទុយឆ្លាត</span>
+                        <div class="xp-bar-wrap">
+                            <span id="player-level">Lv 1</span>
+                            <div class="xp-bar-mini">
+                                <div class="xp-fill-mini" id="xp-fill" style="width: 20%"></div>
+                            </div>
+                            <span id="xp-text">20/100</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-chip streak" title="ឆ្លើយត្រូវជាប់គ្នា">
+                    <span>🔥</span>
+                    <span id="streak-count">0</span>
+                </div>
+
+                <div class="stat-chip stars" title="ផ្កាយសរុប">
+                    <span>⭐</span>
+                    <span id="stars-count">0</span>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <button class="icon-btn" id="sound-btn" title="បិទ/បើក សំឡេង (Sound Toggle)">
+                    <span id="sound-icon">🔊</span>
+                </button>
+                <button class="icon-btn" id="trophy-btn" title="បន្ទប់មេដាយកិត្តិយស (Trophies)">
+                    🏆
+                </button>
+                <button class="icon-btn" id="home-nav-btn" title="ទំព័រដើម (Home Hub)">
+                    🏠
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN HUB: GAME SELECTION & TIER FILTER -->
+        <main class="game-screen active" id="screen-hub">
+            <div class="hub-hero">
+                <div class="hero-mascot">🦉✨</div>
+                <h1>មជ្ឈមណ្ឌលហ្គេមគណិតវិទ្យា</h1>
+                <p>រៀនគណិតវិទ្យាដោយភាពរីករាយតាមកម្រិតវ័យ និងសមត្ថភាពរបស់កូនៗ!</p>
+            </div>
+
+            <!-- TIER FILTER TABS (Filter by grade level) -->
+            <div class="tier-filter-bar" id="tier-filter-bar">
+                <button class="tier-tab active" data-tier="all" onclick="window.gameApp.filterTier('all')">
+                    <span>🌟</span> ទាំងអស់ (All Games)
+                </button>
+                <button class="tier-tab tier-junior" data-tier="junior" onclick="window.gameApp.filterTier('junior')">
+                    <span>🟢</span> កុមារតូច (មត្តេយ្យ - ថ្នាក់ទី២)
+                </button>
+                <button class="tier-tab tier-mid" data-tier="mid" onclick="window.gameApp.filterTier('mid')">
+                    <span>🟡</span> កុមារមធ្យម (ថ្នាក់ទី៣ - ថ្នាក់ទី៤)
+                </button>
+                <button class="tier-tab tier-senior" data-tier="senior" onclick="window.gameApp.filterTier('senior')">
+                    <span>🔴</span> កុមារជាន់ខ្ពស់ (ថ្នាក់ទី៥ - ថ្នាក់ទី៦)
+                </button>
+            </div>
+
+            <div class="section-title">
+                <span>🎯</span> ជ្រើសរើសហ្គេមដែលអ្នកចូលចិត្ត (<span id="games-count-label">9 ហ្គេម</span>)
+            </div>
+
+            <div class="games-grid" id="games-grid">
+                <!-- Game 1: Singapore Math Adventure -->
+                <div class="game-card" data-tiers="all junior mid senior" onclick="window.gameApp.openQuestSelect()" style="--card-glow: rgba(99, 102, 241, 0.4); --card-gradient: linear-gradient(135deg, #6366f1, #4f46e5);">
+                    <div class="game-card-badge">៧ កម្រិតថ្នាក់</div>
+                    <div class="game-card-icon">📚</div>
+                    <span class="game-card-tier-pill tier-pill-all">🌟 គ្រប់កម្រិតថ្នាក់ (K-6)</span>
+                    <h3>ដំណើរផ្សងព្រេងថ្នាក់រៀន</h3>
+                    <div class="game-card-sub">Singapore Math Adventure</div>
+                    <p>រៀនតាមកម្រិតពីមត្តេយ្យដល់ថ្នាក់ទី ៦ ដោយប្រើប្រាស់គំរូបារ (Bar Models), ប្រភាគជារូបភាព និងពីជគណិតងាយៗ។</p>
+                    <div class="game-card-footer">
+                        <span class="reward-chip">⭐ មត្តេយ្យ - ថ្នាក់ទី៦</span>
+                        <span class="play-prompt">លេងឥឡូវនេះ ➜</span>
+                    </div>
+                </div>
+
+                <!-- Game 2: Monster Battle RPG -->
+                <div class="game-card" data-tiers="all junior mid senior" onclick="window.gameApp.openMonsterSelect()" style="--card-glow: rgba(239, 68, 68, 0.4); --card-gradient: linear-gradient(135deg, #ef4444, #b91c1c);">
+                    <div class="game-card-badge" style="background:#ef4444">ប្រយុទ្ធ RPG</div>
+                    <div class="game-card-icon">⚔️</div>
+                    <span class="game-card-tier-pill tier-pill-all">🌟 គ្រប់កម្រិត (មានបិសាចតាមវ័យ)</span>
+                    <h3>ប្រយុទ្ធសត្វចម្លែក</h3>
+                    <div class="game-card-sub">Math Monster Battle RPG</div>
+                    <p>ដោះស្រាយលំហាត់គណិតវិទ្យាដើម្បីបញ្ចេញមន្តអាគម បាល់ភ្លើង និងផ្លេកបន្ទោរ ផ្តួលសត្វចម្លែក Slime, Rocky, Dragon, Mecha Boss!</p>
+                    <div class="game-card-footer">
+                        <span class="reward-chip">🔥 បញ្ចេញវេទមន្ត</span>
+                        <span class="play-prompt">ចូលសមរភូមិ ➜</span>
+                    </div>
+                </div>
+
+                <!-- Game 3: Balloon Pop Rush -->
+                <div class="game-card" data-tiers="all junior mid senior" onclick="window.gameApp.promptDifficultyAndStart('balloon')" style="--card-glow: rgba(6, 182, 212, 0.4); --card-gradient: linear-gradient(135deg, #06b6d4, #0284c7);">
+                    <div class="game-card-badge" style="background:#06b6d4">សប្បាយ & លឿន</div>
+                    <div class="game-card-icon">🎈</div>
+                    <span class="game-card-tier-pill tier-pill-all">🌟 គ្រប់កម្រិត</span>
+                    <h3>បាញ់ប៉េងប៉ោងលេខ</h3>
+                    <div class="game-card-sub">Balloon Pop Rush</div>
+                    <p>ប៉ះបំបែកប៉េងប៉ោងដែលហោះឡើងឲ្យត្រូវនឹងលក្ខខណ្ឌ! (កុមារតូច៖ លេខងាយៗ, កុមារធំ៖ ពហុគុណ និងសមីការ)។</p>
+                    <div class="game-card-footer">
+                        <span class="reward-chip">🎯 គិតលឿន ប៉ះរហ័ស</span>
+                        <span class="play-prompt">បាញ់ប៉េងប៉ោង ➜</span>
+                    </div>
+                </div>
+
+                <!-- Game 4: Speed Math Blitz -->
+                <div class="game-card" data-tiers="all junior mid senior" onclick="window.gameApp.promptDifficultyAndStart('speed')" style="--card-glow: rgba(245, 158, 11, 0.4); --card-gradient: linear-gradient(135deg, #f59e0b, #d97706);">
+                    <div class="game-card-badge" style="background:#f59e0b">៦០ វិនាទី</div>
+                    <div class="game-card-icon">⚡</div>
+                    <span class="game-card-tier-pill tier-pill-all">🌟 គ្រប់កម្រិត</span>
+                    <h3>ប្រណាំងល្បឿន ត្រូវ ឬ ខុស?</h3>
+                    <div class="game-card-sub">Speed Math Blitz (True / False)</div>
+                    <p>ប្រជែងនឹងពេលវេលា ៦០ វិនាទី! ពិនិត្យសមីការហើយឆ្លើយថា «ត្រូវ» ឬ «ខុស» ឲ្យបានច្រើនបំផុត!</p>
+                    <div class="game-card-footer">
+                        <span class="reward-chip">⏱️ ប្រជែងល្បឿន</span>
+                        <span class="play-prompt">ចាប់ផ្តើមប្រណាំង ➜</span>
+                    </div>
+                </div>
+
+                <!-- Game 5: Math Memory Card Match -->
+                <div class="game-card" data-tiers="all junior mid senior" onclick="window.gameApp.promptDifficultyAndStart('memory')" style="--card-glow: rgba(139, 92, 246, 0.4); --card-gradient: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                    <div class="game-card-badge" style="background:#8b5cf6">ហ្វឹកហាត់ខួរក្បាល</div>
+                    <div class="game-card-icon">🧩</div>
+                    <span class="game-card-tier-pill tier-pill-all">🌟 គ្រប់កម្រិត</span>
+                    <h3>ផ្គូផ្គងសន្លឹកបៀលេខ</h3>
+                    <div class="game-card-sub">Math Memory Card Flip</div>
+                    <p>បើកសន្លឹកបៀ 3D ដើម្បីផ្គូផ្គងប្រមាណវិធី និងចម្លើយត្រឹមត្រូវ (កុមារតូច៖ បូកដកងាយៗ, កុមារធំ៖ មេគុណ និងប្រភាគ)!</p>
+                    <div class="game-card-footer">
+                        <span class="reward-chip">🧠 បង្កើនការចងចាំ</span>
+                        <span class="play-prompt">បើកសន្លឹកបៀ ➜</span>
+                    </div>
+                </div>
+
+                <!-- NEW Game 6: Math Fishing Adventure -->
+                <div class="game-card" data-tiers="all junior mid" onclick="window.gameApp.promptDifficultyAndStart('fishing')" style="--card-glow: rgba(2, 132, 199, 0.4); --card-gradient: linear-gradient(135deg, #0284c7, #0369a1);">
+                    <div class="game-card-badge" style="background:#0284c7">ថ្មី! សប្បាយខ្លាំង</div>
+                    <div class="game-card-icon">🎣</div>
+                    <span class="game-card-tier-pill tier-pill-junior">🟢 ពិសេសសម្រាប់កុមារតូច & មធ្យម</span>
+                    <h3>ស្ទូចត្រីគណិតវិទ្យា</h3>
+                    <div class="game-card-sub">Math Fishing Adventure</div>
+                    <p>ទស្សនាត្រីហែលក្នុងទឹកថ្លាឈ្វេង ហើយទម្លាក់សន្ទូចដើម្បីស្ទូចត្រីដែលមានចម្លើយត្រឹមត្រូវ!</p>
+                    <div class="game-card-footer">
+                        <span class="reward-chip">🐟 ស្ទូចត្រីឆ្លាត</span>
+                        <span class="play-prompt">ទៅស្ទូចត្រី ➜</span>
+                    </div>
+                </div>
+
+                <!-- NEW Game 7: Hungry Crocodile (<, =, >) -->
+                <div class="game-card" data-tiers="all junior mid" onclick="window.gameApp.promptDifficultyAndStart('croc')" style="--card-glow: rgba(16, 185, 129, 0.4); --card-gradient: linear-gradient(135deg, #10b981, #047857);">
+                    <div class="game-card-badge" style="background:#10b981">ថ្មី! យល់ច្បាស់</div>
+                    <div class="game-card-icon">🐊</div>
+                    <span class="game-card-tier-pill tier-pill-junior">🟢 ងាយស្រួលយល់សម្រាប់កុមារតូច</span>
+                    <h3>ក្រពើឃ្លាន៖ ប្រៀបធៀបលេខ</h3>
+                    <div class="game-card-sub">Hungry Crocodile (&gt; = &lt;)</div>
+                    <p>ក្រពើឃ្លានចូលចិត្តលេបចំនួនដែលធំជាងគេជានិច្ច! ជួយក្រពើបើកមាត់ឲ្យចំលេខធំ ឬស្មើគ្នា។</p>
+                    <div class="game-card-footer">
+                        <span class="reward-chip">🐊 ធំជាង តូចជាង</span>
+                        <span class="play-prompt">លេងជាមួយក្រពើ ➜</span>
+                    </div>
+                </div>
+
+                <!-- NEW Game 8: Number Train Express -->
+                <div class="game-card" data-tiers="all junior mid senior" onclick="window.gameApp.promptDifficultyAndStart('train')" style="--card-glow: rgba(59, 130, 246, 0.4); --card-gradient: linear-gradient(135deg, #3b82f6, #1e40af);">
+                    <div class="game-card-badge" style="background:#3b82f6">ថ្មី! លំនាំលេខ</div>
+                    <div class="game-card-icon">🚂</div>
+                    <span class="game-card-tier-pill tier-pill-mid">🟡 លំដាប់លេខ និងលំនាំ</span>
+                    <h3>រថភ្លើងរៀបលំដាប់លេខ</h3>
+                    <div class="game-card-sub">Number Train Express</div>
+                    <p>ស្វែងរកទូរថភ្លើងលេខដែលបាត់ដើម្បីឲ្យរថភ្លើងអាចបន្លឺស៊ីផ្លេ «ឈូស ឈូស» បើកចេញដំណើរ!</p>
+                    <div class="game-card-footer">
+                        <span class="reward-chip">🛤️ បំពេញលេខបាត់</span>
+                        <span class="play-prompt">បើករថភ្លើង ➜</span>
+                    </div>
+                </div>
+
+                <!-- NEW Game 9: Pizza Fraction Master -->
+                <div class="game-card" data-tiers="all junior mid senior" onclick="window.gameApp.promptDifficultyAndStart('pizza')" style="--card-glow: rgba(234, 88, 12, 0.4); --card-gradient: linear-gradient(135deg, #ea580c, #c2410c);">
+                    <div class="game-card-badge" style="background:#ea580c">ថ្មី! រូបភាពច្បាស់</div>
+                    <div class="game-card-icon">🍕</div>
+                    <span class="game-card-tier-pill tier-pill-mid">🟡 រៀនប្រភាគតាមចំណិតភីហ្សា</span>
+                    <h3>ចុងភៅភីហ្សាប្រភាគ</h3>
+                    <div class="game-card-sub">Pizza Fraction Chef</div>
+                    <p>ក្លាយជាមេចុងភៅដ៏ពូកែ! ដាក់គ្រឿង Pepperoni ឬ ផ្សិតលើចំណិតភីហ្សាឲ្យត្រូវតាមរូបមន្តប្រភាគ!</p>
+                    <div class="game-card-footer">
+                        <span class="reward-chip">👨‍🍳 ធ្វើភីហ្សា</span>
+                        <span class="play-prompt">ចូលចង្ក្រាន ➜</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- SCREEN: SINGAPORE MATH LEVEL SELECTION & QUESTION ARENA -->
+        <section class="game-screen" id="screen-quest">
+            <div class="game-top-bar">
+                <button class="btn-secondary" onclick="window.gameApp.showScreen('screen-hub')">⬅️ ត្រឡប់ក្រោយ</button>
+                <div class="game-title-group">
+                    <h2 id="quest-header-title">ដំណើរផ្សងព្រេងថ្នាក់រៀន</h2>
+                    <span id="quest-header-sub">Singapore Math Curriculum</span>
+                </div>
+                <div class="stat-chip stars">⭐ <span id="quest-score">0</span></div>
+            </div>
+
+            <!-- Grade Select View -->
+            <div id="quest-select-view">
+                <h3 style="color:#fff; margin-bottom:14px; text-align:center;">ជ្រើសរើសកម្រិតថ្នាក់សិក្សា</h3>
+                <div class="quest-levels-grid" id="quest-levels-grid"></div>
+            </div>
+
+            <!-- Question Active View -->
+            <div id="quest-play-view" class="quest-arena" style="display:none;">
+                <div style="width: 100%;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--text-muted); margin-bottom:6px;">
+                        <span id="quest-q-num">សំណួរទី 1 នៃ 10</span>
+                        <span id="quest-combo-tag">Combo: x1</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="quest-progress-bar" style="width: 10%;"></div>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-tag" id="quest-concept-title">គំរូបូកលេខ</div>
+                    <div class="visual-box" id="quest-visual-box"></div>
+                    <div class="question-text" id="quest-question-text">2 + 3 = ?</div>
+                </div>
+
+                <div class="options-grid" id="quest-options-grid"></div>
+            </div>
+        </section>
+
+        <!-- SCREEN: MONSTER BATTLE RPG -->
+        <section class="game-screen" id="screen-battle">
+            <div class="game-top-bar">
+                <button class="btn-secondary" onclick="window.gameApp.showScreen('screen-hub')">⬅️ ត្រឡប់ក្រោយ</button>
+                <div class="game-title-group">
+                    <h2>ប្រយុទ្ធសត្វចម្លែក</h2>
+                    <span>Math Monster Battle RPG</span>
+                </div>
+                <div class="stat-chip stars">⚔️ <span id="battle-hero-exp">100 HP</span></div>
+            </div>
+
+            <!-- Monster Selector -->
+            <div id="monster-select-view">
+                <h3 style="color:#fff; margin-bottom:14px; text-align:center;">ជ្រើសរើសគូប្រកួតរបស់អ្នក (តាមកម្រិត)</h3>
+                <div class="monsters-select-grid" id="monsters-select-grid"></div>
+            </div>
+
+            <!-- Battle Active Arena -->
+            <div id="monster-active-view" class="battle-arena" style="display:none;">
+                <div class="battle-stage" id="battle-stage">
+                    <div class="combatant hero" id="combatant-hero">
+                        <div class="combatant-avatar" id="battle-hero-avatar">🧙‍♂️</div>
+                        <div style="font-weight:700; color:#fff;" id="battle-hero-name">អ្នកក្លាហាន</div>
+                        <div class="hp-bar-outer">
+                            <div class="hp-bar-inner" id="hero-hp-bar" style="width: 100%;"></div>
+                        </div>
+                        <div class="hp-text" id="hero-hp-text">100 / 100 HP</div>
+                    </div>
+
+                    <div class="vs-badge">VS</div>
+
+                    <div class="combatant monster" id="combatant-monster">
+                        <div class="combatant-avatar" id="battle-monster-avatar">🐲</div>
+                        <div style="font-weight:700; color:#ef4444;" id="battle-monster-name">នាគភ្លើង</div>
+                        <div class="hp-bar-outer">
+                            <div class="hp-bar-inner" id="monster-hp-bar" style="width: 100%;"></div>
+                        </div>
+                        <div class="hp-text" id="monster-hp-text">180 / 180 HP</div>
+                    </div>
+                </div>
+
+                <div class="battle-spell-box">
+                    <div class="battle-prompt-text" id="battle-status-prompt">ដោះស្រាយសមីការដើម្បីបញ្ចេញបាល់ភ្លើង! 🔥</div>
+                    <div class="battle-equation" id="battle-equation">7 × 8 = ?</div>
+                    <div class="options-grid" id="battle-options-grid"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN: BALLOON POP RUSH -->
+        <section class="game-screen" id="screen-balloon">
+            <div class="game-top-bar">
+                <button class="btn-secondary" onclick="window.gameApp.endBalloonGame(); window.gameApp.showScreen('screen-hub');">⬅️ ត្រឡប់ក្រោយ</button>
+                <div class="game-title-group">
+                    <h2>បាញ់ប៉េងប៉ោងលេខ</h2>
+                    <span id="balloon-tier-label">Balloon Pop Rush</span>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <div class="stat-chip" style="color:#38bdf8;">⏱️ <span id="balloon-timer">45s</span></div>
+                    <div class="stat-chip stars">🎈 <span id="balloon-score">0</span></div>
+                </div>
+            </div>
+
+            <div class="balloon-arena-wrapper">
+                <div class="balloon-target-banner">
+                    <div class="balloon-target-text" id="balloon-target-instruction">
+                        ប៉ះប៉េងប៉ោងដែលជា 【ចំនួនគូ (Even Numbers)】!
+                    </div>
+                    <div class="stat-chip streak" id="balloon-streak-badge">Combo: x1</div>
+                </div>
+
+                <div class="balloon-sky" id="balloon-sky"></div>
+            </div>
+        </section>
+
+        <!-- SCREEN: SPEED MATH BLITZ -->
+        <section class="game-screen" id="screen-speed">
+            <div class="game-top-bar">
+                <button class="btn-secondary" onclick="window.gameApp.endSpeedBlitz(); window.gameApp.showScreen('screen-hub');">⬅️ ត្រឡប់ក្រោយ</button>
+                <div class="game-title-group">
+                    <h2>ប្រណាំងល្បឿន ត្រូវ ឬ ខុស?</h2>
+                    <span id="speed-tier-label">Speed Math Blitz</span>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <div class="stat-chip" id="speed-lives">❤️❤️❤️</div>
+                    <div class="stat-chip stars">⚡ <span id="speed-score">0</span></div>
+                </div>
+            </div>
+
+            <div class="speed-arena">
+                <div class="speed-timer-bar-wrap">
+                    <div class="speed-timer-bar-fill" id="speed-timer-fill" style="width: 100%;"></div>
+                </div>
+
+                <div class="speed-card" id="speed-card">
+                    <div style="font-size:0.95rem; color:var(--text-muted); margin-bottom:4px;">តើសមីការនេះត្រឹមត្រូវដែរឬទេ?</div>
+                    <div class="speed-equation" id="speed-equation">18 + 14 = 32</div>
+                    <div style="font-size:0.85rem; color:#f59e0b;" id="speed-combo-text">ឆ្លើយត្រូវជាប់គ្នា: 0</div>
+                </div>
+
+                <div class="speed-buttons-row">
+                    <button class="btn-speed true-btn" onclick="window.gameApp.answerSpeed(true)">
+                        <span>✔️</span> ត្រូវ (TRUE)
+                    </button>
+                    <button class="btn-speed false-btn" onclick="window.gameApp.answerSpeed(false)">
+                        <span>❌</span> ខុស (FALSE)
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN: MEMORY CARD MATCH -->
+        <section class="game-screen" id="screen-memory">
+            <div class="game-top-bar">
+                <button class="btn-secondary" onclick="window.gameApp.showScreen('screen-hub')">⬅️ ត្រឡប់ក្រោយ</button>
+                <div class="game-title-group">
+                    <h2>ផ្គូផ្គងសន្លឹកបៀលេខ</h2>
+                    <span id="memory-tier-label">Math Memory Card Flip</span>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <div class="stat-chip">⏱️ <span id="memory-timer">00:00</span></div>
+                    <div class="stat-chip stars">🔄 <span id="memory-moves">0</span> លើក</div>
+                </div>
+            </div>
+
+            <div class="memory-grid" id="memory-grid"></div>
+        </section>
+
+        <!-- NEW SCREEN: MATH FISHING ADVENTURE -->
+        <section class="game-screen" id="screen-fishing">
+            <div class="game-top-bar">
+                <button class="btn-secondary" onclick="window.gameApp.endFishingGame(); window.gameApp.showScreen('screen-hub');">⬅️ ត្រឡប់ក្រោយ</button>
+                <div class="game-title-group">
+                    <h2>ស្ទូចត្រីគណិតវិទ្យា</h2>
+                    <span>Math Fishing Adventure</span>
+                </div>
+                <div class="stat-chip stars">🐟 <span id="fishing-score">0</span> ក្បាល</div>
+            </div>
+
+            <div style="max-width:760px; margin:0 auto; width:100%;">
+                <div class="balloon-target-banner" style="border-radius:16px 16px 0 0; border-bottom:2px solid #38bdf8;">
+                    <div class="balloon-target-text" id="fishing-target-text">
+                        ស្ទូចត្រីដែលស្មើនឹង៖ 3 + 2 = ?
+                    </div>
+                    <div class="stat-chip streak" id="fishing-progress-tag">ត្រីទី 1/10</div>
+                </div>
+                <div class="fishing-pond" id="fishing-pond">
+                    <div class="pond-surface"></div>
+                    <!-- Swimming fish dynamically injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW SCREEN: HUNGRY CROCODILE (<, =, >) -->
+        <section class="game-screen" id="screen-croc">
+            <div class="game-top-bar">
+                <button class="btn-secondary" onclick="window.gameApp.showScreen('screen-hub')">⬅️ ត្រឡប់ក្រោយ</button>
+                <div class="game-title-group">
+                    <h2>ក្រពើឃ្លាន៖ ប្រៀបធៀបលេខ</h2>
+                    <span>Hungry Crocodile (&gt; = &lt;)</span>
+                </div>
+                <div class="stat-chip stars">⭐ <span id="croc-score">0</span></div>
+            </div>
+
+            <div class="croc-arena">
+                <p style="color:var(--text-muted); font-size:1.05rem;">ក្រពើតែងតែបើកមាត់ទៅលេបចំនួនណាដែលធំជាងគេ!</p>
+                <div class="croc-comparison-box">
+                    <div class="croc-side" id="croc-left-box">12</div>
+                    <div class="croc-middle">
+                        <div class="croc-avatar" id="croc-avatar-display">🐊</div>
+                        <div style="font-size:1.8rem; font-weight:800; color:#fbbf24; margin-top:6px;" id="croc-symbol-display">?</div>
+                    </div>
+                    <div class="croc-side" id="croc-right-box">18</div>
+                </div>
+
+                <div class="croc-controls">
+                    <button class="croc-btn" onclick="window.gameApp.answerCrocodile('&gt;')">
+                        <span>&gt;</span>
+                        <span class="label">ធំជាង (Greater)</span>
+                    </button>
+                    <button class="croc-btn" onclick="window.gameApp.answerCrocodile('=')">
+                        <span>=</span>
+                        <span class="label">ស្មើគ្នា (Equal)</span>
+                    </button>
+                    <button class="croc-btn" onclick="window.gameApp.answerCrocodile('&lt;')">
+                        <span>&lt;</span>
+                        <span class="label">តូចជាង (Less)</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW SCREEN: NUMBER TRAIN EXPRESS -->
+        <section class="game-screen" id="screen-train">
+            <div class="game-top-bar">
+                <button class="btn-secondary" onclick="window.gameApp.showScreen('screen-hub')">⬅️ ត្រឡប់ក្រោយ</button>
+                <div class="game-title-group">
+                    <h2>រថភ្លើងរៀបលំដាប់លេខ</h2>
+                    <span>Number Train Express</span>
+                </div>
+                <div class="stat-chip stars">🚂 <span id="train-score">0</span></div>
+            </div>
+
+            <div class="train-arena">
+                <div class="train-track-wrap">
+                    <div class="train-line" id="train-line-container"></div>
+                </div>
+
+                <div style="text-align:center;">
+                    <div style="color:var(--secondary); font-weight:700; margin-bottom:12px;" id="train-hint-text">លំនាំកើនម្តង៖ +2</div>
+                    <p style="color:#fff; font-size:1.1rem; margin-bottom:14px;">ជ្រើសរើសទូរថភ្លើងណាដែលត្រូវដាក់ត្រង់កន្លែង 【 ? 】៖</p>
+                    <div class="options-grid" id="train-options-grid" style="max-width:540px; margin:0 auto;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW SCREEN: PIZZA FRACTION MASTER -->
+        <section class="game-screen" id="screen-pizza">
+            <div class="game-top-bar">
+                <button class="btn-secondary" onclick="window.gameApp.showScreen('screen-hub')">⬅️ ត្រឡប់ក្រោយ</button>
+                <div class="game-title-group">
+                    <h2>ចុងភៅភីហ្សាប្រភាគ</h2>
+                    <span>Pizza Fraction Chef</span>
+                </div>
+                <div class="stat-chip stars">🍕 <span id="pizza-score">0</span></div>
+            </div>
+
+            <div class="pizza-arena">
+                <div class="question-card" style="max-width:520px;">
+                    <div class="question-tag">រូបមន្តភីហ្សាពីអតិថិជន</div>
+                    <div style="font-size:1.3rem; color:#fff; font-weight:700; margin:10px 0;" id="pizza-recipe-text">
+                        សូមដាក់ Pepperoni លើ ២/៤ នៃភីហ្សា!
+                    </div>
+                    <div style="font-size:0.9rem; color:var(--text-muted);" id="pizza-current-count">
+                        បានដាក់៖ 0 / 4 ចំណិត
+                    </div>
+                </div>
+
+                <div class="pizza-plate">
+                    <div class="pizza-dough" id="pizza-dough">
+                        <!-- Dynamic SVG or CSS radial slices -->
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="window.gameApp.servePizza()" style="font-size:1.3rem; padding:16px 40px;">
+                    បម្រើភីហ្សា! 🍕 (Serve Pizza)
+                </button>
+            </div>
+        </section>
+
+        <!-- UNIVERSAL VICTORY / END SCREEN -->
+        <section class="game-screen" id="screen-victory">
+            <div class="victory-card">
+                <div class="victory-icon" id="victory-icon">🏆</div>
+                <h2 class="victory-title" id="victory-title">អបអរសាទរ!</h2>
+                <p id="victory-msg" style="color:var(--text-muted); font-size:1.1rem;">អ្នកបានបញ្ចប់ហ្គេមដោយជោគជ័យ!</p>
+                
+                <div class="victory-score-pill" id="victory-score-pill">
+                    ពិន្ទុ៖ 10 / 10
+                </div>
+
+                <div class="reward-badges">
+                    <div class="reward-chip" id="victory-xp-gain">+100 XP</div>
+                    <div class="reward-chip" id="victory-stars-gain">+5 ⭐ ផ្កាយ</div>
+                </div>
+
+                <div style="display:flex; gap:16px; margin-top:16px;">
+                    <button class="btn-primary" id="victory-replay-btn">លេងម្តងទៀត 🔄</button>
+                    <button class="btn-secondary" onclick="window.gameApp.showScreen('screen-hub')">ទំព័រដើម 🏠</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- MODAL: DIFFICULTY TIER SELECTOR (Popup when launching mini-games) -->
+    <div class="modal-overlay" id="difficulty-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>ជ្រើសរើសកម្រិតលេង (Difficulty Tier)</h3>
+                <button class="btn-close" onclick="window.gameApp.closeDifficultyModal()">✕</button>
+            </div>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;">ជ្រើសរើសកម្រិតដែលសមស្របនឹងវ័យ និងសមត្ថភាពរបស់ប្អូនៗ៖</p>
+            <div class="difficulty-selector-modal-box">
+                <div class="difficulty-choice-card junior" onclick="window.gameApp.selectDifficultyAndLaunch('junior')">
+                    <span style="font-size:2.2rem;">🟢</span>
+                    <div>
+                        <div style="font-weight:700; color:#fff; font-size:1.1rem;">កុមារតូច (Junior)</div>
+                        <div style="font-size:0.8rem; color:#6ee7b7;">វ័យ ៤-៧ ឆ្នាំ (មត្តេយ្យ - ថ្នាក់ទី២) - រាប់ចំនួន & បូកដកងាយៗ</div>
+                    </div>
+                </div>
+                <div class="difficulty-choice-card mid" onclick="window.gameApp.selectDifficultyAndLaunch('mid')">
+                    <span style="font-size:2.2rem;">🟡</span>
+                    <div>
+                        <div style="font-weight:700; color:#fff; font-size:1.1rem;">កុមារមធ្យម (Intermediate)</div>
+                        <div style="font-size:0.8rem; color:#fde68a;">វ័យ ៨-១០ ឆ្នាំ (ថ្នាក់ទី៣ - ថ្នាក់ទី៤) - មេគុណ វិធីចែក & ប្រភាគ</div>
+                    </div>
+                </div>
+                <div class="difficulty-choice-card senior" onclick="window.gameApp.selectDifficultyAndLaunch('senior')">
+                    <span style="font-size:2.2rem;">🔴</span>
+                    <div>
+                        <div style="font-weight:700; color:#fff; font-size:1.1rem;">កុមារជាន់ខ្ពស់ (Senior)</div>
+                        <div style="font-size:0.8rem; color:#fca5a5;">វ័យ ១១-១៣ ឆ្នាំ (ថ្នាក់ទី៥ - ថ្នាក់ទី៦) - ភាគរយ ទសភាគ & សមីការ</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: AVATAR PICKER -->
+    <div class="modal-overlay" id="avatar-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>ជ្រើសរើសរូបតំណាងរបស់អ្នក</h3>
+                <button class="btn-close" onclick="window.gameApp.closeAvatarModal()">✕</button>
+            </div>
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px;" id="avatar-options-grid"></div>
+        </div>
+    </div>
+
+    <!-- MODAL: TROPHY CABINET -->
+    <div class="modal-overlay" id="trophy-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>បន្ទប់មេដាយកិត្តិយស (Trophies)</h3>
+                <button class="btn-close" onclick="window.gameApp.closeTrophyModal()">✕</button>
+            </div>
+            <div class="trophy-grid" id="trophies-list"></div>
+        </div>
+    </div>
+
+    <!-- Audio Effects Engine & Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
