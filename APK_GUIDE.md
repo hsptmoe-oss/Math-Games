@@ -2,7 +2,16 @@
 
 គម្រោងនេះត្រូវបានរៀបចំឡើងយ៉ាងពេញលេញជាមួយ **Capacitor Android** និង **Progressive Web App (PWA)** ដែលអនុញ្ញាតឲ្យលោកអ្នកបង្កើត និងដំឡើងលើទូរស័ព្ទ Android បានយ៉ាងងាយស្រួលតាមវិធីចំនួន ៣៖
 
+## 🚀 APK File ដែលបានបង្កើតរួចរាល់ (Ready-to-Use APK)
+
+File APK ត្រូវបានបង្កើត និង compile ជោគជ័យ ១០០% រួចរាល់ហើយ៖
+- **ទីតាំងក្នុងកុំព្យូទ័ររបស់អ្នក (Local File):**  
+  👉 [`MathGames-debug.apk`](file:///d:/Softwares/Antigravity/Math-Games/MathGames-debug.apk) (ទំហំ ~4.2 MB)
+- **នៅលើ GitHub Actions Artifact:**  
+  👉 [GitHub Actions Build Artifacts](https://github.com/hsptmoe-oss/Math-Games/actions/runs/36834623648) ➜ ចុចទាញយក **`MathGames-APK`**
+
 ---
+
 
 ## វិធីទី ១៖ បង្កើត APK តាមរយៈ Android Studio (ងាយស្រួល និងពេញនិយមបំផុត)
 
